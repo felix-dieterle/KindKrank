@@ -40,14 +40,13 @@ jobs:
             echo "KEY_ALIAS=$KEY_ALIAS_SECRET" >> "$GITHUB_ENV"
             echo "KEY_PASSWORD=$KEY_PASSWORD_SECRET" >> "$GITHUB_ENV"
           else
-            STORE_PASS=$(openssl rand -base64 24)
-            KEY_PASS=$(openssl rand -base64 24)
+            STORE_PASS=$(openssl rand -hex 24)
             echo "KEYSTORE_PASSWORD=$STORE_PASS" >> "$GITHUB_ENV"
             echo "KEY_ALIAS=release" >> "$GITHUB_ENV"
-            echo "KEY_PASSWORD=$KEY_PASS" >> "$GITHUB_ENV"
+            echo "KEY_PASSWORD=$STORE_PASS" >> "$GITHUB_ENV"
             keytool -genkeypair -v -keystore app/keystore.jks \
               -alias "release" -keyalg RSA -keysize 2048 -validity 10000 \
-              -storepass "$STORE_PASS" -keypass "$KEY_PASS" \
+              -storepass "$STORE_PASS" -keypass "$STORE_PASS" \
               -dname "CN=KindKrank, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=DE" \
               -noprompt
           fi
