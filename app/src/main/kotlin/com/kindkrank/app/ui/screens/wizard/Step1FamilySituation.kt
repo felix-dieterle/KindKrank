@@ -126,6 +126,15 @@ fun Step1FamilySituation(
                 onClick = { onNext(true) },
             )
 
+            Spacer(Modifier.height(12.dp))
+
+            SituationCard(
+                emoji = "🤒",
+                title = "Partner/in nicht berufstätig, aber krank",
+                subtitle = "Ihr Partner / Ihre Partnerin übernimmt normalerweise die Kinderbetreuung, ist aber selbst krank und kann das Kind nicht betreuen",
+                onClick = { onNext(false) },
+            )
+
             Spacer(Modifier.height(16.dp))
 
             // Info box
@@ -173,6 +182,22 @@ fun Step1FamilySituation(
                                 append("20 Kinderkranktage pro Kind pro Jahr")
                             }
                             append(" (max. 50 Tage gesamt).")
+                        },
+                        fontSize = 14.sp,
+                        color = TextPrimary,
+                        lineHeight = 21.sp,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Partner/in krank: ")
+                            }
+                            append("Ist der nicht berufstätige Elternteil selbst krank und kann das Kind nicht betreuen, haben Sie als berufstätiger Elternteil Anspruch auf ")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("10 Kinderkranktage pro Kind pro Jahr")
+                            }
+                            append(" (max. 25 Tage gesamt).")
                         },
                         fontSize = 14.sp,
                         color = TextPrimary,

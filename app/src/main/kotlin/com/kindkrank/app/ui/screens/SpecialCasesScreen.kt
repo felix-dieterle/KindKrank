@@ -45,6 +45,15 @@ private data class SpecialCase(val emoji: String, val title: String, val descrip
 
 private val SPECIAL_CASES = listOf(
     SpecialCase(
+        emoji = "🤒",
+        title = "Partner/in krank – nicht berufstätig",
+        description = "Ist der nicht berufstätige Elternteil, der normalerweise die Kinderbetreuung übernimmt, " +
+            "selbst krank und deshalb nicht in der Lage das Kind zu betreuen, hat der berufstätige " +
+            "Elternteil Anspruch auf Kinderkranktage (§ 45 SGB V). Voraussetzung ist, dass keine andere " +
+            "Person im Haushalt die Betreuung übernehmen kann. Der Anspruch entspricht dem der " +
+            "\"Beide berufstätig\"-Situation: 10 Tage pro Kind pro Jahr (max. 25 Tage gesamt).",
+    ),
+    SpecialCase(
         emoji = "🏥",
         title = "Stationärer Krankenhausaufenthalt",
         description = "Auch beim Krankenhausaufenthalt des Kindes haben Eltern Anspruch auf Kinderkranktage. " +
