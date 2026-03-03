@@ -129,7 +129,7 @@ fun Step3Doctor(
                 text = buildAnnotatedString {
                     append("Bitten Sie explizit um eine ")
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append("„ärztliche Bescheinigung zur Vorlage bei der Krankenkasse"")
+                        append("„ärztliche Bescheinigung zur Vorlage bei der Krankenkasse“")
                     }
                     append(" (Kinderkrankenschein / Muster 21). Diese ist ")
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
