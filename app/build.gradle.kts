@@ -39,6 +39,17 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    val githubToken = (project.findProperty("githubToken") as String?) ?: ""
+    val githubRepoOwner = (project.findProperty("githubRepoOwner") as String?) ?: "felix-dieterle"
+    val githubRepoName = (project.findProperty("githubRepoName") as String?) ?: "KindKrank"
+
+    buildTypes.all {
+        buildConfigField("String", "GITHUB_TOKEN", "\"$githubToken\"")
+        buildConfigField("String", "GITHUB_REPO_OWNER", "\"$githubRepoOwner\"")
+        buildConfigField("String", "GITHUB_REPO_NAME", "\"$githubRepoName\"")
     }
 }
 
