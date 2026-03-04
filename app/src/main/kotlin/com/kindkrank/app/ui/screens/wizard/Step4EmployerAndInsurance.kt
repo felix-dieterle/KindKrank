@@ -67,6 +67,7 @@ fun Step4EmployerAndInsurance(
     krankenkasse: String,
     onGoHome: () -> Unit,
     onSpecialCases: () -> Unit,
+    onStundenrechner: () -> Unit,
     onBack: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -318,6 +319,48 @@ fun Step4EmployerAndInsurance(
                             lineHeight = 21.sp,
                             modifier = Modifier.padding(bottom = 6.dp),
                         )
+                    }
+
+                    // Hint for hourly-wage workers
+                    Spacer(Modifier.height(10.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = CardDefaults.cardColors(containerColor = InfoBlue),
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "\uD83D\uDD52 Arbeiten Sie auf Stundenbasis?",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = PrimaryDark,
+                                modifier = Modifier.padding(bottom = 4.dp),
+                            )
+                            Text(
+                                text = "Bei variablem Stunden- oder Schichtlohn berechnet die Krankenkasse " +
+                                    "das Kinderkrankengeld aus Ihrem Durchschnittsverdienst der letzten 3 Monate. " +
+                                    "Schätzen Sie Ihren Tagessatz mit unserem Rechner:",
+                                fontSize = 13.sp,
+                                color = TextSecondary,
+                                lineHeight = 20.sp,
+                                modifier = Modifier.padding(bottom = 8.dp),
+                            )
+                            OutlinedButton(
+                                onClick = onStundenrechner,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(44.dp),
+                                shape = RoundedCornerShape(8.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryBlue),
+                                border = androidx.compose.foundation.BorderStroke(1.5.dp, PrimaryBlue),
+                            ) {
+                                Text(
+                                    text = "\uD83E\uDDEE Stundenlohn-Rechner öffnen",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            }
+                        }
                     }
 
                     if (kkData != null) {
