@@ -48,6 +48,7 @@ import com.kindkrank.app.ui.theme.TextSecondary
 fun Step1FamilySituation(
     onNext: (isSingleParent: Boolean) -> Unit,
     onBack: () -> Unit,
+    onGrenzgaenger: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -133,6 +134,15 @@ fun Step1FamilySituation(
                 title = "Partner/in nicht berufstätig, aber krank",
                 subtitle = "Ihr Partner / Ihre Partnerin übernimmt normalerweise die Kinderbetreuung, ist aber selbst krank und kann das Kind nicht betreuen",
                 onClick = { onNext(false) },
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            SituationCard(
+                emoji = "\uD83C\uDDE8\uD83C\uDDED",
+                title = "Ich arbeite in der Schweiz (Grenzg\u00E4nger)",
+                subtitle = "Sie wohnen in Deutschland, sind aber bei einem Schweizer Arbeitgeber angestellt",
+                onClick = onGrenzgaenger,
             )
 
             Spacer(Modifier.height(16.dp))
