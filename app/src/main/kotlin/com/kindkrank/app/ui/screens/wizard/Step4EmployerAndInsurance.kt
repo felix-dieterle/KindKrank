@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -31,6 +35,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -77,7 +82,7 @@ fun Step4EmployerAndInsurance(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Arbeitgeber & Kasse") },
+                title = { Text("Arzt & Krankenkasse") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
@@ -114,7 +119,7 @@ fun Step4EmployerAndInsurance(
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "Arbeitgeber & Krankenkasse",
+                text = "Arztbesuch & Kinderkrankengeld",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryDark,
@@ -123,8 +128,8 @@ fun Step4EmployerAndInsurance(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "Jetzt müssen Sie Ihren Arbeitgeber informieren und das Kinderkrankengeld " +
-                    "bei Ihrer Krankenkasse beantragen.",
+                text = "Besuchen Sie so bald wie m\u00F6glich den Kinderarzt und beantragen Sie " +
+                    "anschlie\u00DFend das Kinderkrankengeld bei Ihrer Krankenkasse.",
                 fontSize = 15.sp,
                 color = TextSecondary,
                 textAlign = TextAlign.Center,
@@ -133,7 +138,7 @@ fun Step4EmployerAndInsurance(
             )
             Spacer(Modifier.height(16.dp))
 
-            // Employer section
+            // Doctor section
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
@@ -142,47 +147,59 @@ fun Step4EmployerAndInsurance(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "👔 1. Arbeitgeber informieren",
+                        text = "\uD83E\uDE7A 1. Zum Kinderarzt",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = PrimaryDark,
                         modifier = Modifier.padding(bottom = 10.dp),
                     )
-                    Text(
-                        text = "Teilen Sie Ihrem Arbeitgeber so früh wie möglich mit, dass Sie " +
-                            "aufgrund der Erkrankung Ihres Kindes zu Hause bleiben müssen.",
-                        fontSize = 14.sp,
-                        color = TextPrimary,
-                        lineHeight = 21.sp,
-                        modifier = Modifier.padding(bottom = 12.dp),
+                    DoctorStepRow(
+                        step = 1,
+                        title = "Kinderarzt aufsuchen",
+                        text = "Bringen Sie Ihr Kind zum Kinderarzt (P\u00E4diater) oder Hausarzt. Schildern Sie die Erkrankung.",
                     )
-                    val employerSteps = listOf(
-                        buildAnnotatedString { append("Arbeitgeber telefonisch oder per E-Mail informieren") },
-                        buildAnnotatedString { append("Kinderkrankenschein beim Arbeitgeber einreichen") },
-                        buildAnnotatedString {
-                            append("Arbeitnehmer hat ")
+                    Spacer(Modifier.height(10.dp))
+                    DoctorStepRow(
+                        step = 2,
+                        title = "Kinderkrankenschein anfordern",
+                        text = buildAnnotatedString {
+                            append("Bitten Sie explizit um eine ")
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("keinen Anspruch auf Lohnfortzahlung")
+                                append("\u201E\u00E4rztliche Bescheinigung zur Vorlage bei der Krankenkasse\u201C")
                             }
-                            append(" durch den Arbeitgeber – die Zahlung erfolgt durch die Krankenkasse")
-                        },
-                        buildAnnotatedString {
-                            append("Der Arbeitgeber muss die Fehlzeit ")
+                            append(" (Muster\u00A021). Diese ist ")
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("genehmigen (unbezahlte Freistellung)")
+                                append("unbedingt notwendig")
                             }
+                            append(", um Kinderkrankengeld zu beantragen.")
                         },
                     )
-                    employerSteps.forEach { step ->
+                    Spacer(Modifier.height(10.dp))
+                    DoctorStepRow(
+                        step = 3,
+                        title = "Was der Arzt bescheinigt",
+                        text = "Der Arzt best\u00E4tigt, dass Ihr Kind krank ist und Betreuung ben\u00F6tigt sowie die voraussichtliche Dauer.",
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    // Doctor tips
+                    listOf(
+                        buildAnnotatedString {
+                            append("\u2022 Beantragen Sie den Kinderkrankenschein ")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("gleich beim ersten Arztbesuch")
+                            }
+                            append(" \u2013 nachtr\u00E4glich ist es schwieriger.")
+                        },
+                        buildAnnotatedString {
+                            append("\u2022 Digitale \u00DCbermittlung: Manche Arztpraxen k\u00F6nnen den Schein direkt an Ihre Krankenkasse senden.")
+                        },
+                    ).forEach { tip ->
                         Text(
-                            text = buildAnnotatedString {
-                                append("✅ ")
-                                append(step)
-                            },
-                            fontSize = 14.sp,
-                            color = TextPrimary,
-                            lineHeight = 21.sp,
-                            modifier = Modifier.padding(bottom = 6.dp),
+                            text = tip,
+                            fontSize = 13.sp,
+                            color = TextSecondary,
+                            lineHeight = 20.sp,
+                            modifier = Modifier.padding(bottom = 4.dp),
                         )
                     }
                 }
@@ -200,7 +217,7 @@ fun Step4EmployerAndInsurance(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = "📅 Ihr Anspruch $parentLabel",
+                        text = "\uD83D\uDCC5 Ihr Anspruch $parentLabel",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MediumGreen,
@@ -231,7 +248,7 @@ fun Step4EmployerAndInsurance(
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = "Für Kinder unter 12 Jahren (bzw. ohne Altersbegrenzung bei Behinderung)",
+                        text = "F\u00FCr Kinder unter 12 Jahren (bzw. ohne Altersbegrenzung bei Behinderung)",
                         fontSize = 12.sp,
                         color = Color(0xFF555555),
                         textAlign = TextAlign.Center,
@@ -249,9 +266,9 @@ fun Step4EmployerAndInsurance(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     val kkTitle = if (kkData != null) {
-                        "🏥 2. Kinderkrankengeld beantragen bei der ${kkData.shortName}"
+                        "\uD83C\uDFE5 2. Kinderkrankengeld beantragen bei der ${kkData.shortName}"
                     } else {
-                        "🏥 2. Kinderkrankengeld beantragen"
+                        "\uD83C\uDFE5 2. Kinderkrankengeld beantragen"
                     }
                     Text(
                         text = kkTitle,
@@ -284,16 +301,16 @@ fun Step4EmployerAndInsurance(
                         buildAnnotatedString { append("Kinderkrankenschein (Muster 21) einreichen") },
                         buildAnnotatedString { append("Antrag auf Kinderkrankengeld stellen") },
                         buildAnnotatedString {
-                            append("Kinderkrankengeld beträgt ca. ")
+                            append("Kinderkrankengeld betr\u00E4gt ca. ")
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("90 % des Nettolohns")
+                                append("90\u00A0% des Nettolohns")
                             }
-                            append(" (max. 90 % des Regelentgelts)")
+                            append(" (max. 90\u00A0% des Regelentgelts)")
                         },
                     ).forEach { item ->
                         Text(
                             text = buildAnnotatedString {
-                                append("✅ ")
+                                append("\u2705 ")
                                 append(item)
                             },
                             fontSize = 14.sp,
@@ -315,7 +332,7 @@ fun Step4EmployerAndInsurance(
                             colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue),
                         ) {
                             Text(
-                                text = "🌐 Online-Portal ${kkData.shortName}",
+                                text = "\uD83C\uDF10 Online-Portal ${kkData.shortName}",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                             )
@@ -333,7 +350,7 @@ fun Step4EmployerAndInsurance(
                             border = androidx.compose.foundation.BorderStroke(1.5.dp, PrimaryBlue),
                         ) {
                             Text(
-                                text = "📞 Hotline: ${kkData.hotline}",
+                                text = "\uD83D\uDCDE Hotline: ${kkData.hotline}",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.SemiBold,
                             )
@@ -351,17 +368,17 @@ fun Step4EmployerAndInsurance(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "🎉 Das Wichtigste in Kürze",
+                        text = "\uD83C\uDF89 Das Wichtigste in K\u00FCrze",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = PrimaryDark,
                         modifier = Modifier.padding(bottom = 10.dp),
                     )
                     Text(
-                        text = "1. Kind krank → Arzt → Kinderkrankenschein\n" +
-                            "2. Arbeitgeber informieren & Freistellung beantragen\n" +
+                        text = "1. Kind krank \u2192 Arbeitgeber sofort informieren (Tag\u00A01!)\n" +
+                            "2. Arztbesuch \u2192 Kinderkrankenschein (Muster\u00A021)\n" +
                             "3. Kinderkrankengeld bei Krankenkasse beantragen\n" +
-                            "4. Krankenkasse zahlt ~90 % des Nettolohns",
+                            "4. Krankenkasse zahlt ~90\u00A0% des Nettolohns",
                         fontSize = 14.sp,
                         color = TextPrimary,
                         lineHeight = 24.sp,
@@ -379,7 +396,7 @@ fun Step4EmployerAndInsurance(
                 colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue),
             ) {
                 Text(
-                    text = "↩ Zurück zur Startseite",
+                    text = "\u21A9 Zur\u00FCck zur Startseite",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -396,12 +413,63 @@ fun Step4EmployerAndInsurance(
                 border = androidx.compose.foundation.BorderStroke(1.5.dp, PrimaryBlue),
             ) {
                 Text(
-                    text = "ℹ\uFE0F  Sonderfälle & Ausnahmen anzeigen",
+                    text = "\u2139\uFE0F  Sonderf\u00E4lle & Ausnahmen anzeigen",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
             Spacer(Modifier.height(24.dp))
+        }
+    }
+}
+
+@Composable
+private fun DoctorStepRow(
+    step: Int,
+    title: String,
+    text: String,
+) = DoctorStepRow(
+    step = step,
+    title = title,
+    text = buildAnnotatedString { append(text) },
+)
+
+@Composable
+private fun DoctorStepRow(
+    step: Int,
+    title: String,
+    text: androidx.compose.ui.text.AnnotatedString,
+) {
+    Row(verticalAlignment = Alignment.Top) {
+        Box(
+            modifier = Modifier
+                .size(26.dp)
+                .clip(CircleShape)
+                .background(PrimaryBlue),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = step.toString(),
+                color = SurfaceWhite,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        Spacer(Modifier.width(12.dp))
+        Column {
+            Text(
+                text = title,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryDark,
+                modifier = Modifier.padding(bottom = 4.dp),
+            )
+            Text(
+                text = text,
+                fontSize = 13.sp,
+                color = TextPrimary,
+                lineHeight = 20.sp,
+            )
         }
     }
 }
