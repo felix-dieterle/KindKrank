@@ -10,6 +10,7 @@ import com.kindkrank.app.ui.screens.DisclaimerScreen
 import com.kindkrank.app.ui.screens.GrenzgaengerSchweizScreen
 import com.kindkrank.app.ui.screens.HomeScreen
 import com.kindkrank.app.ui.screens.SpecialCasesScreen
+import com.kindkrank.app.ui.screens.StundenrechnerScreen
 import com.kindkrank.app.ui.screens.wizard.Step1FamilySituation
 import com.kindkrank.app.ui.screens.wizard.Step2Krankenkasse
 import com.kindkrank.app.ui.screens.wizard.Step3Doctor
@@ -103,6 +104,7 @@ fun AppNavigation() {
                     }
                 },
                 onSpecialCases = { navController.navigate(Screen.SpecialCases.route) },
+                onStundenrechner = { navController.navigate(Screen.Stundenrechner.route) },
                 onBack = { navController.popBackStack() },
             )
         }
@@ -125,6 +127,12 @@ fun AppNavigation() {
                         popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Screen.Stundenrechner.route) {
+            StundenrechnerScreen(
                 onBack = { navController.popBackStack() },
             )
         }
