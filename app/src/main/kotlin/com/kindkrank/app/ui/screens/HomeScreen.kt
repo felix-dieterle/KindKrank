@@ -15,7 +15,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -25,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kindkrank.app.ui.components.FeedbackDialog
 import com.kindkrank.app.ui.theme.BackgroundBlue
 import com.kindkrank.app.ui.theme.PrimaryBlue
 import com.kindkrank.app.ui.theme.PrimaryDark
@@ -36,6 +42,12 @@ fun HomeScreen(
     onStartWizard: () -> Unit,
     onSpecialCases: () -> Unit,
 ) {
+    var showFeedbackDialog by remember { mutableStateOf(false) }
+
+    if (showFeedbackDialog) {
+        FeedbackDialog(onDismiss = { showFeedbackDialog = false })
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -131,6 +143,19 @@ fun HomeScreen(
                 text = "ℹ\uFE0F  Sonderfälle & Ausnahmen",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        TextButton(
+            onClick = { showFeedbackDialog = true },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(
+                text = "💡 Verbesserung melden",
+                fontSize = 14.sp,
+                color = TextSecondary,
             )
         }
     }
