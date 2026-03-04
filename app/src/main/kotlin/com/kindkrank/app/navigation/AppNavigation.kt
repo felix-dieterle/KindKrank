@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.kindkrank.app.ui.screens.DisclaimerScreen
+import com.kindkrank.app.ui.screens.GrenzgaengerSchweizScreen
 import com.kindkrank.app.ui.screens.HomeScreen
 import com.kindkrank.app.ui.screens.SpecialCasesScreen
 import com.kindkrank.app.ui.screens.wizard.Step1FamilySituation
@@ -45,6 +46,7 @@ fun AppNavigation() {
                     navController.navigate(Screen.Step2Krankenkasse.createRoute(isSingleParent))
                 },
                 onBack = { navController.popBackStack() },
+                onGrenzgaenger = { navController.navigate(Screen.GrenzgaengerSchweiz.route) },
             )
         }
 
@@ -107,6 +109,17 @@ fun AppNavigation() {
 
         composable(Screen.SpecialCases.route) {
             SpecialCasesScreen(
+                onGoHome = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Screen.GrenzgaengerSchweiz.route) {
+            GrenzgaengerSchweizScreen(
                 onGoHome = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Home.route) { inclusive = true }

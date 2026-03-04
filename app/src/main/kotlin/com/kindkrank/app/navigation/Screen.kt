@@ -16,4 +16,5 @@ sealed class Screen(val route: String) {
             "step4/$isSingleParent/$krankenkasse"
     }
     data object SpecialCases : Screen("special_cases")
+    data object GrenzgaengerSchweiz : Screen("grenzgaenger_schweiz")
 }
