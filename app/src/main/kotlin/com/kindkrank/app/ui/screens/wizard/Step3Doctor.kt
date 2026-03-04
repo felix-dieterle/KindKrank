@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.kindkrank.app.ui.components.WizardProgressIndicator
 import com.kindkrank.app.ui.theme.BackgroundBlue
 import com.kindkrank.app.ui.theme.InfoBlue
+import com.kindkrank.app.ui.theme.LightYellow
 import com.kindkrank.app.ui.theme.PrimaryBlue
 import com.kindkrank.app.ui.theme.PrimaryDark
 import com.kindkrank.app.ui.theme.SurfaceWhite
@@ -60,7 +61,7 @@ fun Step3Doctor(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Arztbesuch") },
+                title = { Text("Arbeitgeber informieren") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
@@ -97,7 +98,7 @@ fun Step3Doctor(
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "Zum Arzt",
+                text = "Arbeitgeber sofort informieren",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = PrimaryDark,
@@ -106,45 +107,80 @@ fun Step3Doctor(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "Der erste Schritt: Ihr Kind muss von einem Arzt untersucht werden und " +
-                    "Sie benötigen eine offizielle Bescheinigung.",
+                text = "Noch heute – auch wenn Sie noch nicht beim Arzt waren! " +
+                    "Ihr Arbeitgeber muss so früh wie möglich wissen, dass Sie nicht kommen können.",
                 fontSize = 15.sp,
                 color = TextSecondary,
                 textAlign = TextAlign.Center,
                 lineHeight = 22.sp,
                 modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(16.dp))
 
-            DoctorActionCard(
+            // Urgency card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = LightYellow),
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(text = "\u23F0", fontSize = 28.sp)
+                    Spacer(Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = "Sofortmaßnahme – Tag 1",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = PrimaryDark,
+                            modifier = Modifier.padding(bottom = 4.dp),
+                        )
+                        Text(
+                            text = buildAnnotatedString {
+                                append("Rufen Sie Ihren Arbeitgeber ")
+                                withStyle(SpanStyle(fontWeight = FontWeight.Bold, color = WarningAmber)) {
+                                    append("noch heute")
+                                }
+                                append(" an oder schreiben Sie eine E-Mail – auch wenn Sie noch nicht beim Arzt waren.")
+                            },
+                            fontSize = 14.sp,
+                            color = TextPrimary,
+                            lineHeight = 21.sp,
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+
+            EmployerActionCard(
                 step = 1,
-                title = "🩺 Kinderarzt aufsuchen",
-                text = "Bringen Sie Ihr Kind zum Kinderarzt (Pädiater) oder Hausarzt. Schildern Sie die Erkrankung.",
+                title = "\uD83D\uDCF1 Arbeitgeber anrufen oder E-Mail schreiben",
+                text = "Teilen Sie mit, dass Ihr Kind krank ist und Sie die Betreuung übernehmen müssen. " +
+                    "Sie können heute nicht zur Arbeit kommen.",
             )
             Spacer(Modifier.height(12.dp))
 
-            DoctorActionCard(
+            EmployerActionCard(
                 step = 2,
-                title = "📄 Kinderkrankenschein anfordern",
+                title = "\uD83D\uDCAC Was Sie mitteilen",
                 text = buildAnnotatedString {
-                    append("Bitten Sie explizit um eine ")
+                    append("\u201EMein Kind ist krank und ich kann es nicht allein lassen. Ich werde heute ")
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append("„ärztliche Bescheinigung zur Vorlage bei der Krankenkasse“")
+                        append("nicht zur Arbeit kommen")
                     }
-                    append(" (Kinderkrankenschein / Muster 21). Diese ist ")
-                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append("unbedingt notwendig")
-                    }
-                    append(", um Kinderkrankengeld zu beantragen.")
+                    append(" und k\u00FCmmere mich um einen Arzttermin.\u201C")
                 },
             )
             Spacer(Modifier.height(12.dp))
 
-            DoctorActionCard(
+            EmployerActionCard(
                 step = 3,
-                title = "📋 Was der Arzt bescheinigt",
-                text = "Der Arzt bescheinigt, dass Ihr Kind krank ist und Betreuung benötigt sowie " +
-                    "die voraussichtliche Dauer der Erkrankung. Sie können für diese Zeit zu Hause bleiben.",
+                title = "\uD83D\uDCC4 Kinderkrankenschein kommt nach",
+                text = "Den ärztlichen Nachweis (Muster 21) erhalten Sie beim Arztbesuch und " +
+                    "können ihn dem Arbeitgeber nachreichen. Er muss Ihnen die Fehlzeit als " +
+                    "unbezahlte Freistellung genehmigen.",
             )
             Spacer(Modifier.height(16.dp))
 
@@ -156,7 +192,7 @@ fun Step3Doctor(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "💡 Wichtige Tipps",
+                        text = "\uD83D\uDCA1 Wichtige Hinweise",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = PrimaryDark,
@@ -164,19 +200,21 @@ fun Step3Doctor(
                     Spacer(Modifier.height(10.dp))
                     listOf(
                         buildAnnotatedString {
-                            append("• Beantragen Sie den Kinderkrankenschein ")
+                            append("\u2022 Ihr Arbeitgeber hat ")
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("gleich beim ersten Arztbesuch")
+                                append("keinen Anspruch auf sofortigen Arztnachweis")
                             }
-                            append(" – nachträglich ist es schwieriger.")
+                            append(" \u2013 die Krankmeldung reicht f\u00FCr Tag 1.")
                         },
                         buildAnnotatedString {
-                            append("• Falls Ihr Kind ins Krankenhaus muss, fragen Sie dort ebenfalls " +
-                                "nach einer entsprechenden Bescheinigung.")
+                            append("\u2022 Sie haben ")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("keinen Anspruch auf Lohnfortzahlung")
+                            }
+                            append(" durch den Arbeitgeber \u2013 das Kinderkrankengeld zahlt die Krankenkasse.")
                         },
                         buildAnnotatedString {
-                            append("• Digitale Übermittlung: Manche Arztpraxen können den Schein " +
-                                "direkt an Ihre Krankenkasse senden.")
+                            append("\u2022 Je fr\u00FCher Sie Bescheid geben, desto besser f\u00FCr die Arbeitsorganisation Ihres Arbeitgebers.")
                         },
                     ).forEach { tip ->
                         Text(
@@ -200,7 +238,7 @@ fun Step3Doctor(
                 colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue),
             ) {
                 Text(
-                    text = "Ich habe den Kinderkrankenschein →",
+                    text = "Arbeitgeber wurde informiert \u2192",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -211,18 +249,18 @@ fun Step3Doctor(
 }
 
 @Composable
-private fun DoctorActionCard(
+private fun EmployerActionCard(
     step: Int,
     title: String,
     text: String,
-) = DoctorActionCard(
+) = EmployerActionCard(
     step = step,
     title = title,
     text = buildAnnotatedString { append(text) },
 )
 
 @Composable
-private fun DoctorActionCard(
+private fun EmployerActionCard(
     step: Int,
     title: String,
     text: androidx.compose.ui.text.AnnotatedString,
