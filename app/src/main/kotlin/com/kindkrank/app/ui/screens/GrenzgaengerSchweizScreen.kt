@@ -170,6 +170,37 @@ fun GrenzgaengerSchweizScreen(
             )
             Spacer(Modifier.height(12.dp))
 
+            // Extra info: what happens after 3 days
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = InfoBlue),
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    Text(text = "\uD83D\uDCA1", fontSize = 18.sp)
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Nach den 3 Tagen – was dann?")
+                            }
+                            append("\nNach Aufbrauchen der 3 bezahlten Tage k\u00F6nnen Sie mit Ihrem Schweizer " +
+                                "Arbeitgeber unbezahlten Urlaub vereinbaren. Pr\u00FCfen Sie zudem Ihren Arbeitsvertrag " +
+                                "oder GAV \u2013 viele bieten mehr als die gesetzlichen 3 Tage. Sind Sie zus\u00E4tzlich in " +
+                                "Deutschland gesetzlich krankenversichert, k\u00F6nnte das deutsche Recht " +
+                                "(\u00A7\u00A045 SGB\u00A0V) greifen \u2013 pr\u00FCfen Sie dies im n\u00E4chsten Schritt.")
+                        },
+                        fontSize = 13.sp,
+                        color = TextPrimary,
+                        lineHeight = 20.sp,
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+
             GrenzgaengerStepCard(
                 step = 4,
                 title = "\uD83C\uDFE5 Pr\u00FCfen: Bin ich in Deutschland krankenversichert?",

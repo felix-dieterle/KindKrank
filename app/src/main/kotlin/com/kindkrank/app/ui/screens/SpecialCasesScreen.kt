@@ -106,9 +106,12 @@ private val SPECIAL_CASES = listOf(
     SpecialCase(
         emoji = "🔄",
         title = "Kinderkranktage aufgebraucht",
-        description = "Sollte das Kind länger krank sein als die verbleibenden Kinderkranktage, muss " +
-            "Urlaub genommen, unbezahlter Urlaub beantragt oder ein anderer Elternteil die Betreuung " +
-            "übernehmen. In Ausnahmesituationen können Bundesländer Sonderregelungen einführen.",
+        description = "Auch wenn Ihre Kinderkranktage aufgebraucht sind, haben Sie weiterhin das " +
+            "gesetzliche Recht auf Freistellung von der Arbeit (\u00A7\u00A045 Abs.\u00A05 SGB\u00A0V) \u2013 " +
+            "die Freistellung wird dann allerdings unbezahlt. Der Arbeitgeber ist gesetzlich verpflichtet, " +
+            "Sie freizustellen, solange das Kind krank und auf Betreuung angewiesen ist. " +
+            "M\u00F6gliche Optionen: unbezahlter Urlaub, regulärer Jahresurlaub oder Übernahme der Betreuung " +
+            "durch den anderen Elternteil. In Ausnahmesituationen können Bundesländer Sonderregelungen einführen.",
     ),
     SpecialCase(
         emoji = "📋",

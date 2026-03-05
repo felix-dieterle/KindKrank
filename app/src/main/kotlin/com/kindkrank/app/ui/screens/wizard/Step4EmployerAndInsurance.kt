@@ -256,6 +256,38 @@ fun Step4EmployerAndInsurance(
                     )
                 }
             }
+            Spacer(Modifier.height(8.dp))
+
+            // Right to leave even after days exhausted
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = InfoBlue),
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    Text(text = "\uD83D\uDCA1", fontSize = 18.sp)
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Tage aufgebraucht? Sie haben weiterhin Anspruch auf Freistellung!")
+                            }
+                            append("\nAuch nach Aufbrauchen der Kinderkranktage sind Sie ")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("nicht verpflichtet, zur Arbeit zu erscheinen")
+                            }
+                            append(". Das Recht auf Freistellung bleibt bestehen (\u00A7\u00A045 Abs.\u00A05 SGB\u00A0V) \u2013 die Zeit ist dann allerdings unbezahlt. " +
+                                "Ihr Arbeitgeber ist gesetzlich verpflichtet, Sie freizustellen.")
+                        },
+                        fontSize = 13.sp,
+                        color = TextPrimary,
+                        lineHeight = 20.sp,
+                    )
+                }
+            }
             Spacer(Modifier.height(12.dp))
 
             // Krankenkasse section
