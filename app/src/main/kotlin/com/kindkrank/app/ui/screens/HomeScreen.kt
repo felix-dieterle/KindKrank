@@ -41,6 +41,7 @@ import com.kindkrank.app.ui.theme.TextSecondary
 fun HomeScreen(
     onStartWizard: () -> Unit,
     onSpecialCases: () -> Unit,
+    onEntwicklungsmeilensteine: () -> Unit,
 ) {
     var showFeedbackDialog by remember { mutableStateOf(false) }
 
@@ -141,6 +142,24 @@ fun HomeScreen(
         ) {
             Text(
                 text = "ℹ\uFE0F  Sonderfälle & Ausnahmen",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        OutlinedButton(
+            onClick = onEntwicklungsmeilensteine,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryBlue),
+            border = androidx.compose.foundation.BorderStroke(1.5.dp, PrimaryBlue),
+        ) {
+            Text(
+                text = "🌱 Entwicklungsmeilensteine",
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
             )

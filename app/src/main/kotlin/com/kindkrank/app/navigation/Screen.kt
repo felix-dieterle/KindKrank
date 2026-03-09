@@ -18,4 +18,5 @@ sealed class Screen(val route: String) {
     data object SpecialCases : Screen("special_cases")
     data object GrenzgaengerSchweiz : Screen("grenzgaenger_schweiz")
     data object Stundenrechner : Screen("stundenrechner")
+    data object Entwicklungsmeilensteine : Screen("entwicklungsmeilensteine")
 }

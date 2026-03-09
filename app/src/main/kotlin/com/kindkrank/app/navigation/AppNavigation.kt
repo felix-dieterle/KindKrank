@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.kindkrank.app.ui.screens.DisclaimerScreen
+import com.kindkrank.app.ui.screens.EntwicklungsmeilensteineScreen
 import com.kindkrank.app.ui.screens.GrenzgaengerSchweizScreen
 import com.kindkrank.app.ui.screens.HomeScreen
 import com.kindkrank.app.ui.screens.SpecialCasesScreen
@@ -38,6 +39,9 @@ fun AppNavigation() {
             HomeScreen(
                 onStartWizard = { navController.navigate(Screen.Step1FamilySituation.route) },
                 onSpecialCases = { navController.navigate(Screen.SpecialCases.route) },
+                onEntwicklungsmeilensteine = {
+                    navController.navigate(Screen.Entwicklungsmeilensteine.route)
+                },
             )
         }
 
@@ -133,6 +137,12 @@ fun AppNavigation() {
 
         composable(Screen.Stundenrechner.route) {
             StundenrechnerScreen(
+                onBack = { navController.popBackStack() },
+            )
+        }
+
+        composable(Screen.Entwicklungsmeilensteine.route) {
+            EntwicklungsmeilensteineScreen(
                 onBack = { navController.popBackStack() },
             )
         }
