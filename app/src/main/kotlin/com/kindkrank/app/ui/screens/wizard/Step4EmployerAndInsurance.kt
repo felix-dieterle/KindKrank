@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kindkrank.app.data.KRANKENKASSEN
 import com.kindkrank.app.data.Krankenkasse
+import com.kindkrank.app.ui.components.CopyableInfoCard
 import com.kindkrank.app.ui.components.WizardProgressIndicator
 import com.kindkrank.app.ui.theme.BackgroundBlue
 import com.kindkrank.app.ui.theme.DarkGreen
@@ -59,6 +61,7 @@ import com.kindkrank.app.ui.theme.SuccessGreen
 import com.kindkrank.app.ui.theme.SurfaceWhite
 import com.kindkrank.app.ui.theme.TextPrimary
 import com.kindkrank.app.ui.theme.TextSecondary
+import com.kindkrank.app.ui.util.copyToClipboard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -259,10 +262,13 @@ fun Step4EmployerAndInsurance(
             Spacer(Modifier.height(8.dp))
 
             // Right to leave even after days exhausted
-            Card(
+            CopyableInfoCard(
+                copyText = "Tage aufgebraucht? Sie haben weiterhin Anspruch auf Freistellung!\n" +
+                    "Auch nach Aufbrauchen der Kinderkranktage sind Sie nicht verpflichtet, zur Arbeit zu erscheinen. " +
+                    "Das Recht auf Freistellung bleibt bestehen (§\u202F45 Abs.\u202F5 SGB\u202FV) – die Zeit ist dann allerdings unbezahlt. " +
+                    "Ihr Arbeitgeber ist gesetzlich verpflichtet, Sie freizustellen.",
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = InfoBlue),
             ) {
                 Row(
                     modifier = Modifier.padding(14.dp),
@@ -285,6 +291,7 @@ fun Step4EmployerAndInsurance(
                         fontSize = 13.sp,
                         color = TextPrimary,
                         lineHeight = 20.sp,
+                        modifier = Modifier.padding(end = 20.dp),
                     )
                 }
             }
@@ -413,22 +420,41 @@ fun Step4EmployerAndInsurance(
                             )
                         }
                         Spacer(Modifier.height(10.dp))
-                        OutlinedButton(
-                            onClick = {
-                                openUrl("tel:${kkData.hotline.replace(" ", "")}")
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp),
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryBlue),
-                            border = androidx.compose.foundation.BorderStroke(1.5.dp, PrimaryBlue),
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(
-                                text = "\uD83D\uDCDE Hotline: ${kkData.hotline}",
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold,
-                            )
+                            OutlinedButton(
+                                onClick = {
+                                    openUrl("tel:${kkData.hotline.replace(" ", "")}")
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(48.dp),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryBlue),
+                                border = androidx.compose.foundation.BorderStroke(1.5.dp, PrimaryBlue),
+                            ) {
+                                Text(
+                                    text = "\uD83D\uDCDE Hotline: ${kkData.hotline}",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            }
+                            Spacer(Modifier.width(8.dp))
+                            IconButton(
+                                onClick = {
+                                    copyToClipboard(context, kkData.hotline, "Nummer kopiert!")
+                                },
+                                modifier = Modifier.size(48.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ContentCopy,
+                                    contentDescription = "Nummer kopieren",
+                                    tint = PrimaryBlue,
+                                    modifier = Modifier.size(20.dp),
+                                )
+                            }
                         }
                     }
                 }
@@ -436,10 +462,14 @@ fun Step4EmployerAndInsurance(
             Spacer(Modifier.height(14.dp))
 
             // Summary
-            Card(
+            CopyableInfoCard(
+                copyText = "Das Wichtigste in Kürze:\n" +
+                    "1. Kind krank → Arbeitgeber sofort informieren (Tag 1!)\n" +
+                    "2. Arztbesuch → Kinderkrankenschein (Muster 21)\n" +
+                    "3. Kinderkrankengeld bei Krankenkasse beantragen\n" +
+                    "4. Krankenkasse zahlt ~90 % des Nettolohns",
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = InfoBlue),
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
@@ -447,7 +477,7 @@ fun Step4EmployerAndInsurance(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = PrimaryDark,
-                        modifier = Modifier.padding(bottom = 10.dp),
+                        modifier = Modifier.padding(bottom = 10.dp, end = 20.dp),
                     )
                     Text(
                         text = "1. Kind krank \u2192 Arbeitgeber sofort informieren (Tag\u00A01!)\n" +

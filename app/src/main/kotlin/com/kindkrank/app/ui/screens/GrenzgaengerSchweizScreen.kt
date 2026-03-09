@@ -40,8 +40,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kindkrank.app.ui.components.CopyableInfoCard
 import com.kindkrank.app.ui.theme.BackgroundBlue
-import com.kindkrank.app.ui.theme.InfoBlue
 import com.kindkrank.app.ui.theme.LightYellow
 import com.kindkrank.app.ui.theme.PrimaryBlue
 import com.kindkrank.app.ui.theme.PrimaryDark
@@ -171,10 +171,15 @@ fun GrenzgaengerSchweizScreen(
             Spacer(Modifier.height(12.dp))
 
             // Extra info: what happens after 3 days
-            Card(
+            CopyableInfoCard(
+                copyText = "Nach den 3 Tagen – was dann?\n" +
+                    "Nach Aufbrauchen der 3 bezahlten Tage können Sie mit Ihrem Schweizer " +
+                    "Arbeitgeber unbezahlten Urlaub vereinbaren. Prüfen Sie zudem Ihren Arbeitsvertrag " +
+                    "oder GAV – viele bieten mehr als die gesetzlichen 3 Tage. Sind Sie zusätzlich in " +
+                    "Deutschland gesetzlich krankenversichert, könnte das deutsche Recht " +
+                    "(§ 45 SGB V) greifen – prüfen Sie dies im nächsten Schritt.",
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = InfoBlue),
             ) {
                 Row(
                     modifier = Modifier.padding(14.dp),
@@ -196,6 +201,7 @@ fun GrenzgaengerSchweizScreen(
                         fontSize = 13.sp,
                         color = TextPrimary,
                         lineHeight = 20.sp,
+                        modifier = Modifier.padding(end = 20.dp),
                     )
                 }
             }
@@ -212,10 +218,13 @@ fun GrenzgaengerSchweizScreen(
             Spacer(Modifier.height(16.dp))
 
             // Swiss law info box
-            Card(
+            CopyableInfoCard(
+                copyText = "Rechtliche Grundlage Schweiz:\n" +
+                    "OR Art. 36 Abs. 3: Bis zu 3 Tage bezahlte Freistellung pro Erkrankung eines Kindes unter 15 Jahren.\n" +
+                    "Kein Kinderkrankengeld: Es gibt keine separate Leistung der Schweizer Krankenkasse (KVG/LAMal) für erkrankte Kinder des Arbeitnehmers.\n" +
+                    "Mehr Tage möglich: Viele Gesamtarbeitsverträge (GAV) bieten mehr als 3 Tage an – prüfen Sie Ihren Arbeitsvertrag oder GAV.",
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                colors = CardDefaults.cardColors(containerColor = InfoBlue),
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
@@ -223,6 +232,7 @@ fun GrenzgaengerSchweizScreen(
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = PrimaryDark,
+                        modifier = Modifier.padding(end = 20.dp),
                     )
                     Spacer(Modifier.height(10.dp))
                     listOf(
