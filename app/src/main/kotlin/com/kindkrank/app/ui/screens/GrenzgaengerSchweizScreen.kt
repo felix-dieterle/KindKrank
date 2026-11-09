@@ -123,7 +123,8 @@ fun GrenzgaengerSchweizScreen(
                         Text(
                             text = "Das deutsche Kinderkrankengeld (\u00A7\u00A045 SGB\u00A0V) gilt in der Regel " +
                                 "nicht f\u00FCr Grenzg\u00E4nger, die in der Schweiz arbeiten und dort versichert " +
-                                "sind. Stattdessen greift das Schweizer Arbeitsrecht (OR Art.\u00A036 Abs.\u00A03).",
+                                "sind. Stattdessen greift Schweizer Arbeitsrecht: Art.\u00A036 Abs.\u00A03 ArG " +
+                                "(Freistellung) und Art.\u00A0329h OR (bezahlte Freistellung, max. 10 Tage pro Dienstjahr).",
                             fontSize = 14.sp,
                             color = TextPrimary,
                             lineHeight = 21.sp,
@@ -163,21 +164,22 @@ fun GrenzgaengerSchweizScreen(
             GrenzgaengerStepCard(
                 step = 3,
                 title = "\uD83D\uDCB6 Lohnfortzahlung durch Schweizer Arbeitgeber",
-                description = "Nach Schweizer Recht (OR Art.\u00A036 Abs.\u00A03) haben Sie Anspruch auf bezahlte " +
-                    "Freistellung von bis zu 3 Tagen pro Erkrankung, wenn Sie pers\u00F6nlich die Betreuung Ihres " +
-                    "Kindes (unter 15 Jahren) \u00FCbernehmen m\u00FCssen. Ihr Schweizer Arbeitgeber zahlt Ihren " +
-                    "Lohn weiter \u2013 es gibt keine separate Leistung der Krankenkasse.",
+                description = "Nach Art.\u00A0329h OR haben Sie Anspruch auf bezahlte Freistellung von bis zu " +
+                    "3 Tagen pro Ereignis, wenn Sie pers\u00F6nlich die Betreuung Ihres kranken Kindes " +
+                    "\u00FCbernehmen m\u00FCssen (max. 10 Tage pro Dienstjahr). Die Freistellung selbst ergibt " +
+                    "sich aus Art.\u00A036 Abs.\u00A03 ArG. Ihr Schweizer Arbeitgeber zahlt den Lohn weiter \u2013 " +
+                    "die Krankenkasse leistet keine Lohnzahlung.",
             )
             Spacer(Modifier.height(12.dp))
 
             // Extra info: what happens after 3 days
             CopyableInfoCard(
-                copyText = "Nach den 3 Tagen – was dann?\n" +
-                    "Nach Aufbrauchen der 3 bezahlten Tage können Sie mit Ihrem Schweizer " +
-                    "Arbeitgeber unbezahlten Urlaub vereinbaren. Prüfen Sie zudem Ihren Arbeitsvertrag " +
-                    "oder GAV – viele bieten mehr als die gesetzlichen 3 Tage. Sind Sie zusätzlich in " +
-                    "Deutschland gesetzlich krankenversichert, könnte das deutsche Recht " +
-                    "(§ 45 SGB V) greifen – prüfen Sie dies im nächsten Schritt.",
+                copyText = "Nach den 3 Tagen \u2013 was dann?\n" +
+                    "Nach Aufbrauchen der 3 bezahlten Tage gilt Art. 324a OR: Lohnfortzahlung nach " +
+                    "Dienstjahr-Skala, weil die Betreuung eine gesetzliche Pflicht ist. Pruefen Sie " +
+                    "zudem Arbeitsvertrag und GAV \u2013 viele bieten mehr als die gesetzlichen 3 Tage. " +
+                    "Organisieren Sie parallel eine Ersatzbetreuung. Ein deutsches Kinderkrankengeld " +
+                    "greift als Grenzgaenger mit Schweizer Arbeitgeber nicht.",
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
             ) {
@@ -192,11 +194,12 @@ fun GrenzgaengerSchweizScreen(
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("Nach den 3 Tagen – was dann?")
                             }
-                            append("\nNach Aufbrauchen der 3 bezahlten Tage k\u00F6nnen Sie mit Ihrem Schweizer " +
-                                "Arbeitgeber unbezahlten Urlaub vereinbaren. Pr\u00FCfen Sie zudem Ihren Arbeitsvertrag " +
-                                "oder GAV \u2013 viele bieten mehr als die gesetzlichen 3 Tage. Sind Sie zus\u00E4tzlich in " +
-                                "Deutschland gesetzlich krankenversichert, k\u00F6nnte das deutsche Recht " +
-                                "(\u00A7\u00A045 SGB\u00A0V) greifen \u2013 pr\u00FCfen Sie dies im n\u00E4chsten Schritt.")
+                            append("\nNach Aufbrauchen der 3 bezahlten Tage gilt Art.\u00A0324a OR: " +
+                                "Lohnfortzahlung nach Dienstjahr-Skala, weil die Betreuung eine gesetzliche " +
+                                "Pflicht ist. Pr\u00FCfen Sie zudem Arbeitsvertrag und GAV \u2013 viele bieten " +
+                                "mehr als die gesetzlichen 3 Tage. Organisieren Sie parallel eine " +
+                                "Ersatzbetreuung. Ein deutsches Kinderkrankengeld greift als Grenzg\u00E4nger " +
+                                "mit Schweizer Arbeitgeber nicht.")
                         },
                         fontSize = 13.sp,
                         color = TextPrimary,
@@ -209,20 +212,23 @@ fun GrenzgaengerSchweizScreen(
 
             GrenzgaengerStepCard(
                 step = 4,
-                title = "\uD83C\uDFE5 Pr\u00FCfen: Bin ich in Deutschland krankenversichert?",
-                description = "Sind Sie \u00FCber eine Befreiung von der Schweizer Versicherungspflicht in " +
-                    "Deutschland gesetzlich krankenversichert (GKV)? Dann k\u00F6nnen Sie ggf. das deutsche " +
-                    "Kinderkrankengeld (\u00A7\u00A045 SGB\u00A0V) zus\u00E4tzlich beantragen. Kontaktieren Sie " +
-                    "Ihre deutsche Krankenkasse, um dies zu pr\u00FCfen.",
+                title = "\uD83C\uDFE5 Familie in Deutschland absichern",
+                description = "Die deutsche Familienversicherung (z.\u00A0B. TK) \u00FCbernimmt Arzt- und " +
+                    "Krankenhauskosten Ihrer Familie, aber keine Lohnfortzahlung f\u00FCr Sie. Als " +
+                    "Grenzg\u00E4nger mit Schweizer Arbeitgeber haben Sie keinen Anspruch auf deutsches " +
+                    "Kinderkrankengeld (\u00A7\u00A045 SGB\u00A0V). Ihr Lohn l\u00E4uft \u00FCber den Schweizer " +
+                    "Arbeitgeber (Art.\u00A0329h OR / Art.\u00A0324a OR).",
             )
             Spacer(Modifier.height(16.dp))
 
             // Swiss law info box
             CopyableInfoCard(
                 copyText = "Rechtliche Grundlage Schweiz:\n" +
-                    "OR Art. 36 Abs. 3: Bis zu 3 Tage bezahlte Freistellung pro Erkrankung eines Kindes unter 15 Jahren.\n" +
-                    "Kein Kinderkrankengeld: Es gibt keine separate Leistung der Schweizer Krankenkasse (KVG/LAMal) für erkrankte Kinder des Arbeitnehmers.\n" +
-                    "Mehr Tage möglich: Viele Gesamtarbeitsverträge (GAV) bieten mehr als 3 Tage an – prüfen Sie Ihren Arbeitsvertrag oder GAV.",
+                    "Art. 36 Abs. 3 ArG: Freistellung von der Arbeit, bis zu 3 Arbeitstage pro Ereignis; fuer Kinder keine Jahresgrenze (Abs. 4).\n" +
+                    "Art. 329h OR: Bezahlte Freistellung fuer die Betreuung eines kranken Kindes, 100 % Lohn, 3 Tage pro Ereignis, max. 10 Tage pro Dienstjahr.\n" +
+                    "Art. 324a OR: Laengere Lohnfortzahlung nach Dienstjahr-Skala.\n" +
+                    "Kein Kinderkrankengeld: Die Schweizer Krankenkasse (KVG/LAMal) zahlt keine Lohnersatzleistung fuer erkrankte Kinder.\n" +
+                    "Mehr Tage moeglich: Viele Gesamtarbeitsvertraege (GAV) bieten mehr als 3 Tage an.",
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
             ) {
@@ -238,11 +244,20 @@ fun GrenzgaengerSchweizScreen(
                     listOf(
                         buildAnnotatedString {
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("OR Art.\u00A036 Abs.\u00A03: ")
+                                append("Art.\u00A036 Abs.\u00A03 ArG: ")
                             }
                             append(
-                                "Bis zu 3 Tage bezahlte Freistellung pro Erkrankung eines Kindes " +
-                                    "unter 15 Jahren.",
+                                "Freistellung von der Arbeit, bis zu 3 Arbeitstage pro Ereignis. " +
+                                    "F\u00FCr Kinder gilt keine Jahresgrenze (Abs.\u00A04).",
+                            )
+                        },
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Art.\u00A0329h OR: ")
+                            }
+                            append(
+                                "Bezahlte Freistellung f\u00FCr die Betreuung eines kranken Kindes " +
+                                    "\u2013 100\u00A0% Lohn, 3 Tage pro Ereignis, max. 10 Tage pro Dienstjahr.",
                             )
                         },
                         buildAnnotatedString {
@@ -294,13 +309,13 @@ fun GrenzgaengerSchweizScreen(
                     ComparisonRow(
                         label = "Rechtsgrundlage",
                         de = "\u00A7\u00A045 SGB\u00A0V",
-                        ch = "OR Art.\u00A036 Abs.\u00A03",
+                        ch = "Art.\u00A0329h OR + Art.\u00A036 ArG",
                     )
                     Spacer(Modifier.height(10.dp))
                     ComparisonRow(
                         label = "Anspruch",
                         de = "10 Tage/Kind/Jahr (20 bei Alleinerz.)",
-                        ch = "Bis zu 3 Tage pro Erkrankung",
+                        ch = "3 Tage/Ereignis, max. 10/Dienstjahr",
                     )
                     Spacer(Modifier.height(10.dp))
                     ComparisonRow(

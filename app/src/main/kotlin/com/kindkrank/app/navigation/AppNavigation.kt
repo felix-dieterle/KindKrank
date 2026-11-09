@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.kindkrank.app.ui.screens.CaregiverWizardScreen
 import com.kindkrank.app.ui.screens.DisclaimerScreen
 import com.kindkrank.app.ui.screens.GrenzgaengerSchweizScreen
 import com.kindkrank.app.ui.screens.HomeScreen
@@ -36,8 +37,34 @@ fun AppNavigation() {
 
         composable(Screen.Home.route) {
             HomeScreen(
-                onStartWizard = { navController.navigate(Screen.Step1FamilySituation.route) },
+                onStartChildSick = { country ->
+                    val target = if (country == com.kindkrank.app.data.WorkCountry.SWITZERLAND) {
+                        Screen.GrenzgaengerSchweiz.route
+                    } else {
+                        Screen.Step1FamilySituation.route
+                    }
+                    navController.navigate(target)
+                },
+                onStartCaregiverSick = { country ->
+                    navController.navigate(Screen.CaregiverWizard.createRoute(country.code))
+                },
                 onSpecialCases = { navController.navigate(Screen.SpecialCases.route) },
+            )
+        }
+
+        composable(
+            route = Screen.CaregiverWizard.route,
+            arguments = listOf(navArgument("workCountry") { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val workCountry = backStackEntry.arguments?.getString("workCountry") ?: "DE"
+            CaregiverWizardScreen(
+                workCountry = workCountry,
+                onGoHome = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                },
+                onBack = { navController.popBackStack() },
             )
         }
 

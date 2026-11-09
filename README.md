@@ -17,17 +17,22 @@ app/src/main/
 ├── kotlin/com/kindkrank/app/
 │   ├── MainActivity.kt              # App-Einstiegspunkt
 │   ├── data/
-│   │   └── KrankenkasseData.kt      # Datensatz der 5 größten Krankenkassen
+│   │   ├── KrankenkasseData.kt      # Datensatz der 5 größten Krankenkassen
+│   │   └── CareRules.kt             # Regeln DE + CH-Grenzgänger, Anspruchs-Engine
 │   ├── navigation/
 │   │   ├── Screen.kt                # Navigations-Routen
 │   │   └── AppNavigation.kt         # NavHost-Konfiguration
 │   └── ui/
 │       ├── theme/                   # Farben, Typografie, Theme
 │       ├── components/
+│       │   ├── CountrySelector.kt    # DE/CH-Auswahl + CountryBadge
+│       │   ├── CopyableInfoCard.kt
 │       │   └── WizardProgressIndicator.kt
 │       └── screens/
 │           ├── DisclaimerScreen.kt  # Rechtlicher Hinweis (App-Start)
-│           ├── HomeScreen.kt        # "Mein Kind ist krank"-Button
+│           ├── HomeScreen.kt        # Zwei Wege: Kind krank / Betreuungsperson krank
+│           ├── CaregiverWizardScreen.kt # 4-Schritte-Zweig Betreuungsperson krank
+│           ├── GrenzgaengerSchweizScreen.kt
 │           ├── SpecialCasesScreen.kt
 │           └── wizard/
 │               ├── Step1FamilySituation.kt
@@ -42,14 +47,29 @@ app/src/main/
 ## Wizard-Flow
 
 1. **Rechtlicher Hinweis** – beim Start angezeigt, Haftungsausschluss gem. § 675 BGB
-2. **Startseite** – `Mein Kind ist krank` Button
-3. **Schritt 1** – Familiensituation (beide Eltern / Alleinerziehend)
-4. **Schritt 2** – Krankenkasse wählen (TK, AOK, Barmer, DAK, KKH)
-5. **Schritt 3** – Arztbesuch & Kinderkrankenschein (Muster 21)
-6. **Schritt 4** – Arbeitgeber informieren & Kinderkrankengeld beantragen
-   - Kassenspezifische Links zum Online-Portal
-   - Direktwahl der Hotline
-7. **Sonderfälle** – Krankenhaus, Behinderung, mehrere Kinder, Beamte u.a.
+2. **Startseite** – Auswahl „Wo arbeiten Sie?“ (Deutschland / Schweiz-Grenzgänger)
+   und zwei gleichwertige Wege:
+   - **Mein Kind ist krank** (bestehender Kinderkrankengeld-Flow)
+   - **Betreuungsperson ist krank** (Mutter/Partner/in fällt aus, Kind gesund)
+3. **Kind krank, DE** – Familiensituation → Krankenkasse → Arzt (Muster 21) → Arbeitgeber & Geld
+4. **Kind krank, CH** – Grenzgänger-Übersicht (Art. 36 ArG / Art. 329h OR)
+5. **Betreuungsperson krank** – 4 interne Schritte:
+   1. Situation & Anspruch (sofort heute)
+   2. Nachweise
+   3. Arbeitgeber informieren (mit kopierbarer Textvorlage)
+   4. Geld & rechtliche Grundlage
+6. **Sonderfälle** – Krankenhaus, Behinderung, mehrere Kinder, Beamte u.a.
+
+### Länder-Logik
+
+| | Arbeit in Deutschland | Grenzgänger in die Schweiz |
+|---|---|---|
+| Sofort | § 275 Abs. 3 BGB | Art. 36 Abs. 3 ArG |
+| Bezahlt | § 616 BGB (ca. 5 Tage/Jahr) | Art. 329h OR (3 Tage/Ereignis, max. 10/Dienstjahr) |
+| Länger | § 2 PflegeZG + Pflegeunterstützungsgeld | Art. 324a OR, GAV/Krankentaggeld |
+| Kind krank | § 45 SGB V, Muster 21 | Art. 36 ArG / Art. 329h OR, kein deutsches Kinderkrankengeld |
+
+Die Regeln liegen testbar in `data/CareRules.kt` (`GermanCareRules`, `SwissCrossBorderRules`).
 
 ## Build-Voraussetzungen
 

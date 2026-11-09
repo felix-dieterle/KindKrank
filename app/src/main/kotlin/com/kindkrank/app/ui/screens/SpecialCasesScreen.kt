@@ -47,21 +47,28 @@ private val SPECIAL_CASES = listOf(
     SpecialCase(
         emoji = "\uD83C\uDDE8\uD83C\uDDED",
         title = "Grenzg\u00E4nger (Arbeit in der Schweiz)",
-        description = "Arbeiten Sie in der Schweiz und wohnen in Deutschland? Dann gilt statt \u00A7\u00A045 SGB\u00A0V " +
-            "das Schweizer Recht (OR Art.\u00A036 Abs.\u00A03): Anspruch auf bis zu 3 Tage bezahlte Freistellung " +
-            "pro Erkrankung bei Kindern unter 15 Jahren. Kein deutsches Kinderkrankengeld, sofern Sie in der " +
-            "Schweiz krankenversichert sind. Ihr Schweizer Arbeitgeber zahlt den vollen Lohn. " +
-            "Starten Sie den Assistenten \u00FCber \u201EMein Kind ist krank\u201C und w\u00E4hlen Sie " +
-            "\u201EIch arbeite in der Schweiz\u201C f\u00FCr den spezifischen Ablauf.",
+        description = "Arbeiten Sie in der Schweiz und wohnen in Deutschland? Dann gilt Schweizer " +
+            "Arbeitsrecht: Art.\u00A036 Abs.\u00A03 ArG (Freistellung, 3 Arbeitstage pro Ereignis, keine " +
+            "Jahresgrenze f\u00FCr Kinder) und Art.\u00A0329h OR (100\u00A0% Lohn, 3 Tage/Ereignis, max. " +
+            "10 Tage pro Dienstjahr). Bei l\u00E4ngerer Betreuung Art.\u00A0324a OR. Kein deutsches " +
+            "Kinderkrankengeld und kein Pflegeunterst\u00FCtzungsgeld. W\u00E4hlen Sie auf der Startseite " +
+            "\u201ESchweiz\u201C und dann den passenden Fall.",
     ),
     SpecialCase(
         emoji = "🤒",
-        title = "Partner/in krank – nicht berufstätig",
-        description = "Ist der nicht berufstätige Elternteil, der normalerweise die Kinderbetreuung übernimmt, " +
-            "selbst krank und deshalb nicht in der Lage das Kind zu betreuen, hat der berufstätige " +
-            "Elternteil Anspruch auf Kinderkranktage (§ 45 SGB V). Voraussetzung ist, dass keine andere " +
-            "Person im Haushalt die Betreuung übernehmen kann. Der Anspruch entspricht dem der " +
-            "\"Beide berufstätig\"-Situation: 10 Tage pro Kind pro Jahr (max. 25 Tage gesamt).",
+        title = "Partner/in krank – Kind gesund",
+        description = "Ist die Betreuungsperson (z. B. die Mutter) krank, das Kind aber gesund, gibt es KEIN " +
+            "Kinderkrankengeld und keine AU für den gesunden Vater. Stattdessen: § 275 Abs. 3 BGB " +
+            "(unzumutbar, unbezahlt), § 616 BGB (ca. 5 Tage/Jahr, oft vertraglich ausgeschlossen) und " +
+            "§ 2 PflegeZG / § 44a SGB XI (bis zu 10 Arbeitstage plus Pflegeunterstützungsgeld der " +
+            "Pflegekasse der Mutter). Nutzen Sie den Zweig „Betreuungsperson ist krank“.",
+    ),
+    SpecialCase(
+        emoji = "👨‍👩‍👧",
+        title = "Partner/in krank – Kind zusätzlich krank",
+        description = "Erkrankt das Kind zusätzlich, greift § 45 SGB V. Dann ist auch die Voraussetzung " +
+            "„keine andere Person im Haushalt“ erfüllt, weil die Betreuungsperson ausfällt. Es gelten " +
+            "10 Kinderkranktage pro Kind und Elternteil (max. 25; alleinerziehend 20/50).",
     ),
     SpecialCase(
         emoji = "🏥",

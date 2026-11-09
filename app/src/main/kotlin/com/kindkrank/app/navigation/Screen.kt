@@ -15,6 +15,9 @@ sealed class Screen(val route: String) {
         fun createRoute(isSingleParent: Boolean, krankenkasse: String) =
             "step4/$isSingleParent/$krankenkasse"
     }
+    data object CaregiverWizard : Screen("caregiver/{workCountry}") {
+        fun createRoute(workCountry: String) = "caregiver/$workCountry"
+    }
     data object SpecialCases : Screen("special_cases")
     data object GrenzgaengerSchweiz : Screen("grenzgaenger_schweiz")
     data object Stundenrechner : Screen("stundenrechner")
