@@ -46,3 +46,5 @@ signingReport.html
 
 # JVM crash logs
 hs_err_pid*
+
+build-check.log*
