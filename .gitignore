@@ -48,3 +48,4 @@ signingReport.html
 hs_err_pid*
 
 build-check.log*
+publish-build.log*

@@ -49,30 +49,45 @@ Get-Content $log -Encoding UTF8 | Select-Object -Last 20
 Ein APK ersetzt eine installierte App nur, wenn **alle** Punkte stimmen:
 
 1. **Gleicher `applicationId`** (`com.kindkrank.app`) - kein Wechsel.
-2. **Gleiche Signatur.** Chat-APKs sind Debug-Builds, signiert mit
-   `%USERPROFILE%\.android\debug.keystore` dieses PCs -> nur von hier bauen
-   und versenden. Die GitHub-Release-APKs sind mit dem Release-Keystore
-   (`secrets.KEYSTORE_BASE64`) signiert und damit eine **eigene Spur**:
-   Wechsel Debug <-> Release erfordert Deinstallation (Datenverlust).
+2. **Gleiche Signatur.** Auf dem Handy ist die **Release-Signatur**
+   (Zertifikat `EB:7D:EA:09...`, Keystore `F:\prg\keys\kindkrank\`).
+   Alle bisherigen Chat-APKs ab Build 15 waren Release-Builds. **Debug-APKs
+   (Zertifikat `59:9F:98:4F...`) koennen die installierte App NICHT
+   aktualisieren** - Android meldet dann nur "App wurde nicht installiert".
+   Deshalb fuer den Chat **immer** `publish-release-apk.ps1` benutzen
+   (baut + signiert release, prueft Zertifikat/SHA, kein Debug-Build).
+   Deinstallation (Datenverlust) nur als letzter Ausweg.
 3. **`versionCode` streng groesser** als installiert (`versionName` ist egal).
-   Automatisch: `versionCode = 1000 + git commit count` (Default in
-   `app/build.gradle.kts`, ueberschreibbar mit `-PversionCode=N`; Werte < 1000
-   werden auf `1000 + N` gehoben, damit der Release-Workflow mit
-   `run_number` nicht unter die Debug-Versionen rutscht). Gleicher Code-Stand
-   ohne neuen Commit: **`-PversionCode=<alt+1>`** setzen.
+   `app/build.gradle.kts` nutzt jetzt `resolveVersionCode()`: explizite Werte
+   < 1000 werden auf `1000 + N` gehoben. CI: `1000 + run_number`
+   (z. B. 1018). Lokal: `publish-release-apk.ps1` nimmt automatisch
+   `1000 + letzte CI-Buildnummer + 1`.
 4. Kein `minSdk`/`targetSdk`-Problem: Downgrade nur mit `adb install -d`.
 
-Verifikation vor dem Versand:
+Verifikation vor dem Versand (macht das Skript selbst):
 
 ```powershell
 & "C:\Users\Felix D\AppData\Local\Android\Sdk\build-tools\34.0.0\aapt2.exe" `
-  dump badging "F:\oc-projects\KindKrank\app\build\outputs\apk\debug\app-debug.apk" |
+  dump badging "F:\oc-projects\KindKrank\app\build\outputs\apk\release\app-release.apk" |
   Select-String "package:"
+& "C:\Users\Felix D\AppData\Local\Android\Sdk\build-tools\34.0.0\apksigner.bat" `
+  verify --print-certs "F:\oc-projects\KindKrank\app\build\outputs\apk\release\app-release.apk"
 ```
+
+### `adb` nie ohne Timeout
+
+Am 10.11.2026 hing ein Tool-Call `adb devices; adb shell dumpsys package ...`
+(kein Telefon verbunden) > 29 Minuten und riss den Chat in den 30-Minuten-
+Timeout. `adb` immer nur nach `adb devices`-Pruefung und mit hartem Timeout
+(`Start-Process` + `WaitForExit(30000)` + `taskkill /T /F`) aufrufen.
 
 ## Stand 10.11.2026
 
 - Share statt Copy + Gesetzeslinks, 5-Jahres-Regel, versionCode-Automatik:
-  committet und gepusht (`cf45f8d`).
-- Chat-APK v1.1 (versionCode 1051) gebaut und per Telegram versendet -
-  installierbar ueber v1.0 (versionCode 1).
+  committet und gepusht (`cf45f8d`, `97b2bd3`).
+- **Erkenntnis:** Die installierte App ist release-signiert; die Debug-APKs
+  (versionCode 1051/1052) waren deshalb nicht installierbar.
+- Release-APK **v1.1 (Build 17, versionCode 17)** per Telegram versendet
+  (message_id 8470) - updatefaehig ueber Build 14/15/16.
+- Neues Skript `publish-release-apk.ps1` (release-signiert, versionCode
+  automatisch, Verifikation).

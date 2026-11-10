@@ -29,8 +29,7 @@ android {
         applicationId = "com.kindkrank.app"
         minSdk = 24
         targetSdk = 35
-        versionCode = (project.findProperty("versionCode") as String?)?.toInt()
-            ?: gitVersionCode(rootDir)
+        versionCode = resolveVersionCode(project)
         versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
