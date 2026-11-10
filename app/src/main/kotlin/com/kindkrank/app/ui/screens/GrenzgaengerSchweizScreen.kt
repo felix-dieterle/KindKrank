@@ -40,7 +40,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kindkrank.app.ui.components.CopyableInfoCard
+import com.kindkrank.app.data.LawLinks
+import com.kindkrank.app.ui.components.LegalLinksRow
+import com.kindkrank.app.ui.components.ShareableInfoCard
 import com.kindkrank.app.ui.theme.BackgroundBlue
 import com.kindkrank.app.ui.theme.LightYellow
 import com.kindkrank.app.ui.theme.PrimaryBlue
@@ -133,6 +135,10 @@ fun GrenzgaengerSchweizScreen(
                 }
             }
             Spacer(Modifier.height(16.dp))
+            LegalLinksRow(
+                links = listOf(LawLinks.ARG_36, LawLinks.OR_329H, LawLinks.SGB_V_45),
+            )
+            Spacer(Modifier.height(16.dp))
 
             Text(
                 text = "Ihr Ablauf als Grenzg\u00E4nger",
@@ -173,8 +179,8 @@ fun GrenzgaengerSchweizScreen(
             Spacer(Modifier.height(12.dp))
 
             // Extra info: what happens after 3 days
-            CopyableInfoCard(
-                copyText = "Nach den 3 Tagen \u2013 was dann?\n" +
+            ShareableInfoCard(
+                text = "Nach den 3 Tagen \u2013 was dann?\n" +
                     "Nach Aufbrauchen der 3 bezahlten Tage gilt Art. 324a OR: Lohnfortzahlung nach " +
                     "Dienstjahr-Skala, weil die Betreuung eine gesetzliche Pflicht ist. Pruefen Sie " +
                     "zudem Arbeitsvertrag und GAV \u2013 viele bieten mehr als die gesetzlichen 3 Tage. " +
@@ -210,6 +216,47 @@ fun GrenzgaengerSchweizScreen(
             }
             Spacer(Modifier.height(12.dp))
 
+            // 5-year rule for unmarried couples (affects who can claim the care leave)
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp),
+                colors = CardDefaults.cardColors(containerColor = LightYellow),
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    Text(text = "\uD83D\uDC65", fontSize = 22.sp)
+                    Spacer(Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = "Nicht verheiratet? Die 5-Jahres-Regel",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = PrimaryDark,
+                            modifier = Modifier.padding(bottom = 6.dp),
+                        )
+                        Text(
+                            text = "Will Ihre Partnerin oder Ihr Partner die Betreuung übernehmen " +
+                                "und dafür den bezahlten Betreuungsurlaub (Art.\u00A036 Abs.\u00A03 ArG " +
+                                "/ Art.\u00A0329h OR) beanspruchen, muss sie oder er seit mindestens " +
+                                "5 Jahren mit dem Kind in einem gemeinsamen Haushalt leben. Fehlen " +
+                                "diese 5 Jahre, bleibt nur die Lohnfortzahlung nach Art.\u00A0324a OR " +
+                                "\u2013 ohne die 3 bezahlten Betreuungstage. Für verheiratete Paare " +
+                                "gilt die Frist nicht.",
+                            fontSize = 14.sp,
+                            color = TextPrimary,
+                            lineHeight = 21.sp,
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            LegalLinksRow(
+                links = listOf(LawLinks.ARG_36, LawLinks.OR_329H, LawLinks.OR_324A),
+            )
+            Spacer(Modifier.height(12.dp))
+
             GrenzgaengerStepCard(
                 step = 4,
                 title = "\uD83C\uDFE5 Familie in Deutschland absichern",
@@ -222,8 +269,8 @@ fun GrenzgaengerSchweizScreen(
             Spacer(Modifier.height(16.dp))
 
             // Swiss law info box
-            CopyableInfoCard(
-                copyText = "Rechtliche Grundlage Schweiz:\n" +
+            ShareableInfoCard(
+                text = "Rechtliche Grundlage Schweiz:\n" +
                     "Art. 36 Abs. 3 ArG: Freistellung von der Arbeit, bis zu 3 Arbeitstage pro Ereignis; fuer Kinder keine Jahresgrenze (Abs. 4).\n" +
                     "Art. 329h OR: Bezahlte Freistellung fuer die Betreuung eines kranken Kindes, 100 % Lohn, 3 Tage pro Ereignis, max. 10 Tage pro Dienstjahr.\n" +
                     "Art. 324a OR: Laengere Lohnfortzahlung nach Dienstjahr-Skala.\n" +
@@ -289,6 +336,15 @@ fun GrenzgaengerSchweizScreen(
                     }
                 }
             }
+            Spacer(Modifier.height(16.dp))
+            LegalLinksRow(
+                links = listOf(
+                    LawLinks.ARG_36,
+                    LawLinks.OR_329H,
+                    LawLinks.OR_324A,
+                    LawLinks.ZGB_272_276,
+                ),
+            )
             Spacer(Modifier.height(16.dp))
 
             // Comparison table

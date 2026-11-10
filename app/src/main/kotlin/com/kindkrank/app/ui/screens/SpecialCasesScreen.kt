@@ -32,6 +32,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kindkrank.app.data.LawLinks
+import com.kindkrank.app.data.LegalLink
+import com.kindkrank.app.ui.components.LegalLinksRow
 import com.kindkrank.app.ui.theme.BackgroundBlue
 import com.kindkrank.app.ui.theme.LightYellow
 import com.kindkrank.app.ui.theme.PrimaryBlue
@@ -41,7 +44,12 @@ import com.kindkrank.app.ui.theme.TextPrimary
 import com.kindkrank.app.ui.theme.TextSecondary
 import com.kindkrank.app.ui.theme.WarningAmber
 
-private data class SpecialCase(val emoji: String, val title: String, val description: String)
+private data class SpecialCase(
+    val emoji: String,
+    val title: String,
+    val description: String,
+    val links: List<LegalLink> = emptyList(),
+)
 
 private val SPECIAL_CASES = listOf(
     SpecialCase(
@@ -53,6 +61,7 @@ private val SPECIAL_CASES = listOf(
             "10 Tage pro Dienstjahr). Bei l\u00E4ngerer Betreuung Art.\u00A0324a OR. Kein deutsches " +
             "Kinderkrankengeld und kein Pflegeunterst\u00FCtzungsgeld. W\u00E4hlen Sie auf der Startseite " +
             "\u201ESchweiz\u201C und dann den passenden Fall.",
+        links = listOf(LawLinks.ARG_36, LawLinks.OR_329H, LawLinks.OR_324A),
     ),
     SpecialCase(
         emoji = "🤒",
@@ -62,6 +71,12 @@ private val SPECIAL_CASES = listOf(
             "(unzumutbar, unbezahlt), § 616 BGB (ca. 5 Tage/Jahr, oft vertraglich ausgeschlossen) und " +
             "§ 2 PflegeZG / § 44a SGB XI (bis zu 10 Arbeitstage plus Pflegeunterstützungsgeld der " +
             "Pflegekasse der Mutter). Nutzen Sie den Zweig „Betreuungsperson ist krank“.",
+        links = listOf(
+            LawLinks.BGB_275,
+            LawLinks.BGB_616,
+            LawLinks.PFLEGEZG_2,
+            LawLinks.SGB_XI_44A,
+        ),
     ),
     SpecialCase(
         emoji = "👨‍👩‍👧",
@@ -69,6 +84,7 @@ private val SPECIAL_CASES = listOf(
         description = "Erkrankt das Kind zusätzlich, greift § 45 SGB V. Dann ist auch die Voraussetzung " +
             "„keine andere Person im Haushalt“ erfüllt, weil die Betreuungsperson ausfällt. Es gelten " +
             "10 Kinderkranktage pro Kind und Elternteil (max. 25; alleinerziehend 20/50).",
+        links = listOf(LawLinks.SGB_V_45),
     ),
     SpecialCase(
         emoji = "🏥",
@@ -76,18 +92,21 @@ private val SPECIAL_CASES = listOf(
         description = "Auch beim Krankenhausaufenthalt des Kindes haben Eltern Anspruch auf Kinderkranktage. " +
             "Die Bescheinigung stellt das Krankenhaus aus. Der Anspruch besteht unabhängig vom Alter des Kindes, " +
             "wenn ein Elternteil medizinisch notwendig mitaufgenommen wird.",
+        links = listOf(LawLinks.SGB_V_45),
     ),
     SpecialCase(
         emoji = "♿",
         title = "Kind mit Behinderung",
         description = "Bei Kindern mit Behinderung, die auf Betreuung angewiesen sind, gilt keine Altersgrenze " +
             "(keine 12-Jahres-Grenze). Der Anspruch auf Kinderkranktage gilt unbegrenzt.",
+        links = listOf(LawLinks.SGB_V_45),
     ),
     SpecialCase(
         emoji = "👶",
         title = "Mehrere Kinder",
         description = "Für jedes Kind unter 12 Jahren haben Sie 10 (bzw. 20 bei Alleinerziehenden) Tage Anspruch, " +
             "jedoch maximal 25 (bzw. 50) Tage insgesamt. Beispiel: 2 Kinder = 20 Tage je Elternteil, aber max. 25.",
+        links = listOf(LawLinks.SGB_V_45),
     ),
     SpecialCase(
         emoji = "📅",
@@ -95,6 +114,7 @@ private val SPECIAL_CASES = listOf(
         description = "Kinderkranktage können zwischen Elternteilen übertragen werden, wenn ein Elternteil " +
             "seinen Anspruch nicht vollständig nutzt. Bitte fragen Sie bei Ihrer Krankenkasse nach, " +
             "da die Regelungen sich ändern können.",
+        links = listOf(LawLinks.SGB_V_45),
     ),
     SpecialCase(
         emoji = "🏢",
@@ -102,6 +122,7 @@ private val SPECIAL_CASES = listOf(
         description = "Der Arbeitgeber ist verpflichtet, die Freistellung zu gewähren (§ 45 SGB V). " +
             "Verweigert er dies, haben Arbeitnehmer trotzdem Anspruch – konsultieren Sie bei Problemen " +
             "einen Fachanwalt für Arbeitsrecht oder den Betriebsrat.",
+        links = listOf(LawLinks.SGB_V_45),
     ),
     SpecialCase(
         emoji = "💰",
@@ -119,6 +140,7 @@ private val SPECIAL_CASES = listOf(
             "Sie freizustellen, solange das Kind krank und auf Betreuung angewiesen ist. " +
             "M\u00F6gliche Optionen: unbezahlter Urlaub, regulärer Jahresurlaub oder Übernahme der Betreuung " +
             "durch den anderen Elternteil. In Ausnahmesituationen können Bundesländer Sonderregelungen einführen.",
+        links = listOf(LawLinks.SGB_V_45),
     ),
     SpecialCase(
         emoji = "📋",
@@ -201,6 +223,10 @@ fun SpecialCasesScreen(onGoHome: () -> Unit, onBack: () -> Unit) {
                                 color = TextPrimary,
                                 lineHeight = 21.sp,
                             )
+                            if (sc.links.isNotEmpty()) {
+                                Spacer(Modifier.height(8.dp))
+                                LegalLinksRow(links = sc.links)
+                            }
                         }
                     }
                 }

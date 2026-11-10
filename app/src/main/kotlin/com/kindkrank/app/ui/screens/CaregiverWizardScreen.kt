@@ -24,6 +24,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -49,9 +50,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kindkrank.app.data.CareRulesProvider
 import com.kindkrank.app.data.Entitlement
+import com.kindkrank.app.data.PartnerStatus
 import com.kindkrank.app.data.WorkCountry
-import com.kindkrank.app.ui.components.CopyableInfoCard
 import com.kindkrank.app.ui.components.CountryBadge
+import com.kindkrank.app.ui.components.LegalLinksRow
+import com.kindkrank.app.ui.components.ShareableInfoCard
 import com.kindkrank.app.ui.components.WizardProgressIndicator
 import com.kindkrank.app.ui.theme.BackgroundBlue
 import com.kindkrank.app.ui.theme.DarkGreen
@@ -65,10 +68,12 @@ import com.kindkrank.app.ui.theme.SurfaceWhite
 import com.kindkrank.app.ui.theme.TextPrimary
 import com.kindkrank.app.ui.theme.TextSecondary
 
+// Reihenfolge folgt dem Handlungsdruck: erst den Arbeitgeber informieren (noch heute),
+// danach die Nachweise besorgen. Vorher standen die Nachweise vor dem Arbeitgeber.
 private val STEP_TITLES = listOf(
     "Situation & Anspruch",
-    "Nachweise",
     "Arbeitgeber",
+    "Nachweise",
     "Geld & Recht",
 )
 
@@ -80,8 +85,10 @@ fun CaregiverWizardScreen(
     onBack: () -> Unit,
 ) {
     val country = WorkCountry.fromCode(workCountry)
-    val entitlement = CareRulesProvider.forCountry(country).caregiverSick()
     var step by rememberSaveable { mutableStateOf(0) }
+    var partnerStatusIndex by rememberSaveable { mutableStateOf(PartnerStatus.MARRIED.ordinal) }
+    val partnerStatus = PartnerStatus.fromIndex(partnerStatusIndex)
+    val entitlement = CareRulesProvider.forCountry(country).caregiverSick(partnerStatus)
 
     BackHandler {
         if (step > 0) step-- else onBack()
@@ -123,9 +130,14 @@ fun CaregiverWizardScreen(
             Spacer(Modifier.height(8.dp))
 
             when (step) {
-                0 -> CaregiverStepSituation(country, entitlement)
-                1 -> CaregiverStepEvidence(entitlement)
-                2 -> CaregiverStepEmployer(entitlement)
+                0 -> CaregiverStepSituation(
+                    country = country,
+                    entitlement = entitlement,
+                    partnerStatus = partnerStatus,
+                    onPartnerStatusChange = { partnerStatusIndex = it.ordinal },
+                )
+                1 -> CaregiverStepEmployer(entitlement)
+                2 -> CaregiverStepEvidence(entitlement)
                 else -> CaregiverStepMoney(country, entitlement)
             }
 
@@ -168,9 +180,67 @@ fun CaregiverWizardScreen(
 }
 
 @Composable
-private fun CaregiverStepSituation(country: WorkCountry, entitlement: Entitlement) {
+private fun PartnerStatusSelector(
+    country: WorkCountry,
+    selected: PartnerStatus,
+    onSelect: (PartnerStatus) -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = SurfaceWhite),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = "Familienstand der Betreuungsperson",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                color = PrimaryDark,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = if (country == WorkCountry.SWITZERLAND) {
+                    "Bei nicht verheirateten Paaren entscheidet die Dauer des gemeinsamen " +
+                        "Haushalts \u00FCber den Anspruch (5-Jahres-Regel)."
+                } else {
+                    "Bestimmt nur die Anrede in der Arbeitgeber-Vorlage \u2013 die 5-Jahres-Regel " +
+                        "gibt es im deutschen Recht nicht."
+                },
+                fontSize = 12.sp,
+                color = TextSecondary,
+                lineHeight = 18.sp,
+            )
+            Spacer(Modifier.height(10.dp))
+            PartnerStatus.values().forEach { status ->
+                FilterChip(
+                    selected = selected == status,
+                    onClick = { onSelect(status) },
+                    label = { Text(status.chipLabel, fontSize = 13.sp) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CaregiverStepSituation(
+    country: WorkCountry,
+    entitlement: Entitlement,
+    partnerStatus: PartnerStatus,
+    onPartnerStatusChange: (PartnerStatus) -> Unit,
+) {
     CountryBadge(country = country)
     Spacer(Modifier.height(12.dp))
+    PartnerStatusSelector(
+        country = country,
+        selected = partnerStatus,
+        onSelect = onPartnerStatusChange,
+    )
+    Spacer(Modifier.height(16.dp))
     Text(
         text = entitlement.title,
         fontSize = 22.sp,
@@ -339,6 +409,7 @@ private fun CaregiverStepEvidence(entitlement: Entitlement) {
 
 @Composable
 private fun CaregiverStepEmployer(entitlement: Entitlement) {
+    var selectedTemplate by rememberSaveable { mutableStateOf(0) }
     SectionTitle(
         title = "Arbeitgeber informieren",
         subtitle = "Informieren Sie Ihren Arbeitgeber am ersten Tag \u2013 m\u00FCndlich oder per E-Mail.",
@@ -386,32 +457,91 @@ private fun CaregiverStepEmployer(entitlement: Entitlement) {
     }
 
     Spacer(Modifier.height(4.dp))
-    CopyableInfoCard(
-        copyText = entitlement.employerTemplate,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "\uD83D\uDCE7 Textvorlage f\u00FCr Ihren Arbeitgeber",
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                color = PrimaryDark,
-                modifier = Modifier.padding(bottom = 8.dp, end = 20.dp),
-            )
-            Text(
-                text = entitlement.employerTemplate,
-                fontSize = 13.sp,
-                color = TextPrimary,
-                lineHeight = 20.sp,
-                modifier = Modifier.padding(end = 20.dp),
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Tippen Sie auf die Karte, um den Text zu kopieren.",
-                fontSize = 11.sp,
-                color = TextSecondary,
-            )
+
+    val templates = entitlement.employerTemplates
+    val safeIndex = if (selectedTemplate in templates.indices) selectedTemplate else 0
+    val template = templates.getOrNull(safeIndex)
+
+    if (templates.size > 1) {
+        Text(
+            text = "Familienstand \u2013 der Text wird angepasst:",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = TextSecondary,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            templates.forEachIndexed { index, item ->
+                FilterChip(
+                    selected = safeIndex == index,
+                    onClick = { selectedTemplate = index },
+                    label = { Text(item.label, fontSize = 13.sp) },
+                )
+            }
+        }
+        Spacer(Modifier.height(12.dp))
+    }
+
+    if (template != null) {
+        ShareableInfoCard(
+            text = template.text,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "\uD83D\uDCE7 Textvorlage f\u00FCr Ihren Arbeitgeber (${template.label})",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = PrimaryDark,
+                    modifier = Modifier.padding(bottom = 8.dp, end = 20.dp),
+                )
+                Text(
+                    text = template.text,
+                    fontSize = 13.sp,
+                    color = TextPrimary,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(end = 20.dp),
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Mit \u201ETeilen\u201C direkt an Ihren Arbeitgeber senden.",
+                    fontSize = 11.sp,
+                    color = TextSecondary,
+                )
+            }
+        }
+
+        val note = template.note
+        if (note != null) {
+            Spacer(Modifier.height(10.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(containerColor = LightYellow),
+            ) {
+                Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.Top) {
+                    Text(text = "\u26A0\uFE0F", fontSize = 18.sp)
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        text = note,
+                        fontSize = 13.sp,
+                        color = TextPrimary,
+                        lineHeight = 20.sp,
+                    )
+                }
+            }
+        }
+
+        val links = entitlement.legalBasis
+            .flatMap { it.links }
+            .distinctBy { it.url }
+        if (links.isNotEmpty()) {
+            Spacer(Modifier.height(10.dp))
+            LegalLinksRow(links = links)
         }
     }
 }
@@ -481,6 +611,10 @@ private fun CaregiverStepMoney(country: WorkCountry, entitlement: Entitlement) {
                     color = TextPrimary,
                     lineHeight = 19.sp,
                 )
+                if (basis.links.isNotEmpty()) {
+                    Spacer(Modifier.height(8.dp))
+                    LegalLinksRow(links = basis.links)
+                }
             }
         }
     }

@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kindkrank.app.data.LawLinks
+import com.kindkrank.app.ui.components.LegalLinksRow
 import com.kindkrank.app.ui.theme.ErrorRed
 import com.kindkrank.app.ui.theme.LightYellow
 import com.kindkrank.app.ui.theme.PrimaryBlue
@@ -132,6 +134,8 @@ fun DisclaimerScreen(onAccepted: () -> Unit) {
                     color = Color(0xFF888888),
                     lineHeight = 18.sp,
                 )
+                Spacer(Modifier.height(8.dp))
+                LegalLinksRow(links = listOf(LawLinks.BGB_675))
             }
         }
 

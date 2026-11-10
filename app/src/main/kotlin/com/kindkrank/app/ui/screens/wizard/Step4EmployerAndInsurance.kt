@@ -48,7 +48,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kindkrank.app.data.KRANKENKASSEN
 import com.kindkrank.app.data.Krankenkasse
-import com.kindkrank.app.ui.components.CopyableInfoCard
+import com.kindkrank.app.data.LawLinks
+import com.kindkrank.app.ui.components.LegalLinksRow
+import com.kindkrank.app.ui.components.ShareableInfoCard
 import com.kindkrank.app.ui.components.WizardProgressIndicator
 import com.kindkrank.app.ui.theme.BackgroundBlue
 import com.kindkrank.app.ui.theme.DarkGreen
@@ -259,11 +261,15 @@ fun Step4EmployerAndInsurance(
                     )
                 }
             }
+            LegalLinksRow(
+                links = listOf(LawLinks.SGB_V_45),
+                modifier = Modifier.padding(top = 6.dp),
+            )
             Spacer(Modifier.height(8.dp))
 
             // Right to leave even after days exhausted
-            CopyableInfoCard(
-                copyText = "Tage aufgebraucht? Sie haben weiterhin Anspruch auf Freistellung!\n" +
+            ShareableInfoCard(
+                text = "Tage aufgebraucht? Sie haben weiterhin Anspruch auf Freistellung!\n" +
                     "Auch nach Aufbrauchen der Kinderkranktage sind Sie nicht verpflichtet, zur Arbeit zu erscheinen. " +
                     "Das Recht auf Freistellung bleibt bestehen (§\u202F45 Abs.\u202F5 SGB\u202FV) – die Zeit ist dann allerdings unbezahlt. " +
                     "Ihr Arbeitgeber ist gesetzlich verpflichtet, Sie freizustellen.",
@@ -462,8 +468,8 @@ fun Step4EmployerAndInsurance(
             Spacer(Modifier.height(14.dp))
 
             // Summary
-            CopyableInfoCard(
-                copyText = "Das Wichtigste in Kürze:\n" +
+            ShareableInfoCard(
+                text = "Das Wichtigste in Kürze:\n" +
                     "1. Kind krank → Arbeitgeber sofort informieren (Tag 1!)\n" +
                     "2. Arztbesuch → Kinderkrankenschein (Muster 21)\n" +
                     "3. Kinderkrankengeld bei Krankenkasse beantragen\n" +

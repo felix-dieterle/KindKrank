@@ -18,6 +18,7 @@ app/src/main/
 │   ├── MainActivity.kt              # App-Einstiegspunkt
 │   ├── data/
 │   │   ├── KrankenkasseData.kt      # Datensatz der 5 größten Krankenkassen
+│   │   ├── LawLinks.kt              # Direktlinks zu BGB/SGB/PflegeZG/ArG/OR
 │   │   └── CareRules.kt             # Regeln DE + CH-Grenzgänger, Anspruchs-Engine
 │   ├── navigation/
 │   │   ├── Screen.kt                # Navigations-Routen
@@ -26,7 +27,8 @@ app/src/main/
 │       ├── theme/                   # Farben, Typografie, Theme
 │       ├── components/
 │       │   ├── CountrySelector.kt    # DE/CH-Auswahl + CountryBadge
-│       │   ├── CopyableInfoCard.kt
+│       │   ├── ShareableInfoCard.kt  # Text per Share-Sheet teilen
+│       │   ├── LegalLinksRow.kt      # Direktlinks auf BGB/SGB/ArG/OR
 │       │   └── WizardProgressIndicator.kt
 │       └── screens/
 │           ├── DisclaimerScreen.kt  # Rechtlicher Hinweis (App-Start)
@@ -55,8 +57,8 @@ app/src/main/
 4. **Kind krank, CH** – Grenzgänger-Übersicht (Art. 36 ArG / Art. 329h OR)
 5. **Betreuungsperson krank** – 4 interne Schritte:
    1. Situation & Anspruch (sofort heute)
-   2. Nachweise
-   3. Arbeitgeber informieren (mit kopierbarer Textvorlage)
+   2. Arbeitgeber informieren (mit teilbarer Textvorlage, Ehepartner/Partner)
+   3. Nachweise
    4. Geld & rechtliche Grundlage
 6. **Sonderfälle** – Krankenhaus, Behinderung, mehrere Kinder, Beamte u.a.
 
