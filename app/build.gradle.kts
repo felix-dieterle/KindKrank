@@ -4,6 +4,23 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+fun gitVersionCode(dir: File): Int = try {
+    val process = ProcessBuilder("git", "rev-list", "--count", "HEAD")
+        .directory(dir)
+        .start()
+    val count = process.inputStream.bufferedReader().use { it.readText() }.trim().toInt()
+    process.waitFor()
+    1000 + count
+} catch (e: Exception) {
+    1001
+}
+
+fun resolveVersionCode(project: Project): Int {
+    val explicit = (project.findProperty("versionCode") as String?)?.toIntOrNull()
+        ?: return gitVersionCode(project.rootDir)
+    return if (explicit < 1000) 1000 + explicit else explicit
+}
+
 android {
     namespace = "com.kindkrank.app"
     compileSdk = 35
@@ -12,8 +29,9 @@ android {
         applicationId = "com.kindkrank.app"
         minSdk = 24
         targetSdk = 35
-        versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 1
-        versionName = "1.0"
+        versionCode = (project.findProperty("versionCode") as String?)?.toInt()
+            ?: gitVersionCode(rootDir)
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

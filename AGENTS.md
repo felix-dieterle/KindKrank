@@ -26,7 +26,7 @@ Deshalb gilt hier:
 
 ```powershell
 $log = "F:\oc-projects\KindKrank\build-check.log"
-$p = Start-Process -FilePath ".\gradlew.bat" `
+$p = Start-Process -FilePath "F:\oc-projects\KindKrank\gradlew.bat" `
     -ArgumentList ":app:assembleDebug","--no-daemon","--console=plain" `
     -WorkingDirectory "F:\oc-projects\KindKrank" -PassThru -WindowStyle Hidden `
     -RedirectStandardOutput $log -RedirectStandardError "$log.err"
@@ -41,12 +41,38 @@ Get-Content $log -Encoding UTF8 | Select-Object -Last 20
 
 3. Nach jedem Build das Ergebnis pruefen (ExitCode 0 + Logzeile
    `BUILD SUCCESSFUL`), nicht nur "Datei existiert".
+   `Start-Process -FilePath` braucht den **absoluten** Pfad
+   (`-WorkingDirectory` loest den Dateinamen nicht auf).
+
+## Update-Faehigkeit (Pflicht vor jedem APK-Versand)
+
+Ein APK ersetzt eine installierte App nur, wenn **alle** Punkte stimmen:
+
+1. **Gleicher `applicationId`** (`com.kindkrank.app`) - kein Wechsel.
+2. **Gleiche Signatur.** Chat-APKs sind Debug-Builds, signiert mit
+   `%USERPROFILE%\.android\debug.keystore` dieses PCs -> nur von hier bauen
+   und versenden. Die GitHub-Release-APKs sind mit dem Release-Keystore
+   (`secrets.KEYSTORE_BASE64`) signiert und damit eine **eigene Spur**:
+   Wechsel Debug <-> Release erfordert Deinstallation (Datenverlust).
+3. **`versionCode` streng groesser** als installiert (`versionName` ist egal).
+   Automatisch: `versionCode = 1000 + git commit count` (Default in
+   `app/build.gradle.kts`, ueberschreibbar mit `-PversionCode=N`; Werte < 1000
+   werden auf `1000 + N` gehoben, damit der Release-Workflow mit
+   `run_number` nicht unter die Debug-Versionen rutscht). Gleicher Code-Stand
+   ohne neuen Commit: **`-PversionCode=<alt+1>`** setzen.
+4. Kein `minSdk`/`targetSdk`-Problem: Downgrade nur mit `adb install -d`.
+
+Verifikation vor dem Versand:
+
+```powershell
+& "C:\Users\Felix D\AppData\Local\Android\Sdk\build-tools\34.0.0\aapt2.exe" `
+  dump badging "F:\oc-projects\KindKrank\app\build\outputs\apk\debug\app-debug.apk" |
+  Select-String "package:"
+```
 
 ## Stand 10.11.2026
 
-- Uncommitted: Umbau "Copy -> Share" plus Gesetzeslinks
-  (`ShareableInfoCard.kt`, `LegalLinksRow.kt`, `LawLinks.kt`,
-  `ShareUtils.kt` neu; `CopyableInfoCard.kt` entfernt) sowie die
-  5-Jahres-Regel im Betreuungs-Wizard.
-- Dieser Stand wurde **nie kompiliert** (Build hing am 09.11. um 21:18).
-  Vor dem naechsten APK-Versand: bauen, pruefen, committen.
+- Share statt Copy + Gesetzeslinks, 5-Jahres-Regel, versionCode-Automatik:
+  committet und gepusht (`cf45f8d`).
+- Chat-APK v1.1 (versionCode 1051) gebaut und per Telegram versendet -
+  installierbar ueber v1.0 (versionCode 1).
